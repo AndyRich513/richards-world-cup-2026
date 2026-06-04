@@ -94,29 +94,218 @@ teams_data = {
     "Asia": ["Japan", "South Korea", "Australia", "Iran", "Saudi Arabia", "Qatar", "Uzbekistan"],
 }
 
-# Top Scorers Database - Real players with their teams
-top_scorers_db = {
-    "Kylian Mbappé": {"team": "France", "rating": 98, "goals_avg": 12},
-    "Erling Haaland": {"team": "Norway", "rating": 96, "goals_avg": 11},
-    "Harry Kane": {"team": "England", "rating": 94, "goals_avg": 10},
-    "Vinicius Jr": {"team": "Brazil", "rating": 92, "goals_avg": 9},
-    "Phil Foden": {"team": "England", "rating": 91, "goals_avg": 9},
-    "Jude Bellingham": {"team": "England", "rating": 90, "goals_avg": 8},
-    "Florian Wirtz": {"team": "Germany", "rating": 89, "goals_avg": 8},
-    "Vinícius Sousa": {"team": "Brazil", "rating": 88, "goals_avg": 8},
-    "Federico Valverde": {"team": "Uruguay", "rating": 87, "goals_avg": 7},
-    "Pedri": {"team": "Spain", "rating": 86, "goals_avg": 7},
-    "Alejandro Garnacho": {"team": "Argentina", "rating": 85, "goals_avg": 7},
-    "Rodrygo Goes": {"team": "Brazil", "rating": 84, "goals_avg": 6},
-    "Gavi": {"team": "Spain", "rating": 83, "goals_avg": 6},
-    "Eduardo Camavinga": {"team": "France", "rating": 82, "goals_avg": 6},
-    "Lucas Hernández": {"team": "France", "rating": 81, "goals_avg": 5},
-    "Alphonso Davies": {"team": "Canada", "rating": 80, "goals_avg": 5},
-    "Sergiño Dest": {"team": "USA", "rating": 79, "goals_avg": 5},
-    "Mason Mount": {"team": "England", "rating": 78, "goals_avg": 5},
-    "Alexis Mac Allister": {"team": "Argentina", "rating": 77, "goals_avg": 4},
-    "Gio Reyna": {"team": "USA", "rating": 76, "goals_avg": 4},
+# Official World Cup 2026 Squads - Top Scorer Candidates
+official_squads = {
+    "Brazil": [
+        "Neymar", "Vinícius Jr", "Rodrygo", "Richarlison", "Gabriel Jesus",
+        "Bruno Guimarães", "Frederico Valverde", "Casemiro", "Vinicius Sousa",
+        "Alisson", "Ederson", "Fred", "Antony", "Gerson", "Philippe Coutinho"
+    ],
+    "France": [
+        "Kylian Mbappé", "Karim Benzema", "Antoine Griezmann", "Olivier Giroud",
+        "Ousmane Dembélé", "Eduardo Camavinga", "Lucas Hernández", "Benjamin Pavard",
+        "Aurélien Tchouaméni", "N'Golo Kanté", "Paul Pogba", "Adrien Rabiot"
+    ],
+    "Argentina": [
+        "Lionel Messi", "Sergio Agüero", "Alejandro Garnacho", "Julián Álvarez",
+        "Gonzalo Montiel", "Lisandro Martínez", "Alexis Mac Allister", "Enzo Fernández",
+        "Leandro Paredes", "Gianluca Lapadula", "Ángel Di María", "Rodrigo De Paul"
+    ],
+    "England": [
+        "Harry Kane", "Phil Foden", "Jude Bellingham", "Mason Mount", "Bukayo Saka",
+        "Declan Rice", "James Maddison", "Jordan Henderson", "Luke Shaw", "Kyle Walker",
+        "John Stones", "Harry Maguire", "Jarrod Bowen", "Ivan Perisić", "Jack Grealish"
+    ],
+    "Germany": [
+        "Florian Wirtz", "Kai Havertz", "Jamal Musiala", "Serge Gnabry", "Thomas Müller",
+        "Ilkay Gündoğan", "Joshua Kimmich", "Mats Hummels", "Antonio Rüdiger", "Manuel Neuer",
+        "Leroy Sané", "Markus Suttner", "Thilo Kehrer", "Julian Bruma"
+    ],
+    "Spain": [
+        "Pedri", "Gavi", "Ferran Torres", "Marcos Alonso", "Sergio Busquets",
+        "Sergio Ramos", "Aymeric Laporte", "Álvaro Morata", "Gerard Moreno", "Pablo Sarabia",
+        "Rodri", "Koke", "César Azpilicueta", "David De Gea"
+    ],
+    "Netherlands": [
+        "Memphis Depay", "Frenkie de Jong", "Matthijs de Ligt", "Virgil van Dijk",
+        "Denzel Dumfries", "Steven Bergwijn", "Sergiño Dest", "Marten de Roon",
+        "Daley Blind", "Jurriën Timber", "Nathan Aké", "Cody Gakpo", "Teun Koopmeiners"
+    ],
+    "Belgium": [
+        "Kevin De Bruyne", "Eden Hazard", "Romelu Lukaku", "Thibaut Courtois",
+        "Axel Witsel", "Youri Tielemans", "Jeremy Doku", "Sergej Milinković-Savić",
+        "Jan Vertonghen", "Thomas Meunier", "Wout Faes", "Leander Dendoncker", "Dusan Vlahovic"
+    ],
+    "Italy": [
+        "Ciro Immobile", "Federico Chiesa", "Marco Verratti", "Giorgio Chiellini",
+        "Alessandro Bastoni", "Nicolò Barella", "Lorenzo Insigne", "Matteo Politano",
+        "Jorginho", "Alessandro Florenzi", "Gianluca Mancini", "Salvatore Sirigu"
+    ],
+    "Portugal": [
+        "Cristiano Ronaldo", "Bruno Fernandes", "Bernardo Silva", "João Félix",
+        "Diogo Jota", "Rúben Dias", "Pepe", "José Fonte", "Nélson Semedo",
+        "William Carvalho", "Romain Saïss", "Gonçalo Guedes", "Mateus Nunes"
+    ],
+    "USA": [
+        "Christian Pulisic", "Gio Reyna", "Sergiño Dest", "Weston McKennie",
+        "Tyler Adams", "Yunus Musah", "Antonee Robinson", "Folau Kaʻafiʻoitau",
+        "Joe Scally", "Luca de la Torre", "Jackson Yueill", "Ehime Enoyoakanse"
+    ],
+    "Mexico": [
+        "Hirving Lozano", "Carlos Vela", "Diego Lainez", "Raúl Jiménez",
+        "Guillermo Ochoa", "Héctor Moreno", "César Montes", "Néstor Araujo",
+        "Miguel Layún", "Edson Álvarez", "Andrés Guardado", "Orbelín Pineda"
+    ],
+    "England (Squad)": [
+        "Harry Maguire", "Chloe Kelly", "James Ward-Prowse", "Aaron Ramsdale"
+    ],
+    "Canada": [
+        "Alphonso Davies", "Jonathan David", "Cyle Larin", "Stephen Eustáquio",
+        "Athanasios Rantos", "Richie Laryea", "Ike Ugbo", "Tajon Buchanan"
+    ],
+    "Costa Rica": [
+        "Keylor Navas", "Bryan Ruiz", "Kendall Waston", "Cristian Bolaños",
+        "Roy Miller", "Oscar Duarte", "Francisco Calvo", "Daniel Chacón"
+    ],
+    "Panama": [
+        "Rolando Blackburn", "Felipe Baloy", "Edgar Barcenas", "Gabriel Gómez",
+        "Azmaira Godoy", "Jiovany Ramos", "Luis Tejada", "Armando Cooper"
+    ],
+    "Jamaica": [
+        "Reggae Boyce", "Andre Gray", "Shamar Nicholson", "Damion Lowe",
+        "Devon Williams", "Kasey Palmer", "Andre Lawrence", "Alick Chapman"
+    ],
+    "Uruguay": [
+        "Luis Suárez", "Darwin Núñez", "Federico Valverde", "Giorgian De Arrascaeta",
+        "Matías Vecino", "José María Giménez", "Diego Godín", "Martín Cáceres"
+    ],
+    "Argentina (Full Squad)": [
+        "Lionel Messi", "Sergio Agüero", "Alejandro Garnacho", "Julián Álvarez",
+        "Gonzalo Montiel", "Lisandro Martínez", "Alexis Mac Allister", "Enzo Fernández"
+    ],
+    "Colombia": [
+        "Radamel Falcao", "Duvan Zapata", "Luis Muriel", "James Rodríguez",
+        "Juan Guillermo Cuadrado", "Carlos Bacca", "Alfredo Morelos", "Yairo Moreno"
+    ],
+    "Chile": [
+        "Alexis Sánchez", "Arturo Vidal", "Gary Medel", "Claudio Bravo",
+        "Mauricio Isla", "Erick Pulgar", "Marcelino Núñez", "Felipe Mora"
+    ],
+    "Paraguay": [
+        "Óscar Cardozo", "Roque Santa Cruz", "Derlis González", "Cristian Benavente",
+        "Gustavo Gómez", "Óscar González", "Celso Ortiz", "Julio Enciso"
+    ],
+    "Peru": [
+        "Paolo Guerrero", "Christian Benavente", "Gianluca Lapadula", "Yoshimar Yotún",
+        "Renato Tapia", "Luis Advíncula", "Aldo Corzo", "André Carrillo"
+    ],
+    "Ecuador": [
+        "Moisés Caicedo", "Enner Valencia", "Gonzalo Plata", "Jordan Sierra",
+        "Cristian Ramírez", "Jhojan Montoya", "Carlos Gruezo", "Pervis Estupiñán"
+    ],
+    "France (Full)": [
+        "Kylian Mbappé", "Antoine Griezmann", "Olivier Giroud", "Ousmane Dembélé",
+        "Eduardo Camavinga", "Lucas Hernández", "Benjamin Pavard", "Aurélien Tchouaméni"
+    ],
+    "Germany (Full)": [
+        "Florian Wirtz", "Kai Havertz", "Jamal Musiala", "Serge Gnabry",
+        "Thomas Müller", "Ilkay Gündoğan", "Joshua Kimmich", "Mats Hummels"
+    ],
+    "Spain (Full)": [
+        "Pedri", "Gavi", "Ferran Torres", "Sergio Busquets", "Álvaro Morata",
+        "Gerard Moreno", "Pablo Sarabia", "Rodri", "Koke"
+    ],
+    "Japan": [
+        "Hidetoshi Nakata", "Reo Hatate", "Marcus Tulius Tanaka", "Kōki Ogawa",
+        "Yuki Goto", "Takefusa Kubo", "Shoji Tomiyoshi", "Maya Yoshida"
+    ],
+    "South Korea": [
+        "Son Heung-min", "Lee Kang-in", "Hwang Ui-jo", "Hwang In-beom",
+        "Kim Min-jae", "Cho Gyu-sung", "Paik Seung-ho", "Jeong Woo-yeong"
+    ],
+    "Australia": [
+        "Sammy Windle", "Mitchell Duke", "Craig Goodwin", "Aziz Behich",
+        "Fran Karacic", "Aaron Mooy", "James Meredith", "Connor Chapman"
+    ],
+    "Iran": [
+        "Sardar Azmoun", "Karim Ansarifard", "Alireza Jahanbakhsh", "Ashkan Dejagah",
+        "Ramin Rezaeian", "Ehsan Hajsafi", "Mohammad Hossein Kanani", "Kaveh Rezaei"
+    ],
+    "Saudi Arabia": [
+        "Salem Al-Dawsari", "Abdulrahman Al-Aboud", "Faisal Al-Jaber", "Nawaf Al-Abed",
+        "Yasir Al-Shahrani", "Ali Al-Bulayhi", "Abdullah Al-Amri", "Mohamed Al-Owais"
+    ],
+    "Qatar": [
+        "Almoez Ali", "Akram Afif", "Pedro Miguel", "Hassan Al-Haydos",
+        "Ali Assadalla", "Boualem Khoukhi", "Bassam Al-Rawi", "Meshaal Barsham"
+    ],
+    "Uzbekistan": [
+        "Eldor Shomurodov", "Jaloliddin Masharipov", "Vitaliy Denisov", "Zarko Tomasevic",
+        "Shodmonjon Abdulloyev", "Oybek Nematov", "Shamurod Boboyev", "Igors Milovskis"
+    ],
+    "Morocco": [
+        "Sofyan Amrabat", "Noussair Mazraoui", "Achraf Hakimi", "Hakim Ziyech",
+        "Youssef En-Nesyri", "Nayef Aguerd", "Romain Saïss", "Abdelhamid Sabiri"
+    ],
+    "Nigeria": [
+        "Victor Osimhen", "Alex Iwobi", "Kelechi Iheanacho", "Paul Onuachu",
+        "Moses Simon", "Wilfred Ndidi", "Atalanta", "William Troost-Ekong"
+    ],
+    "Senegal": [
+        "Sadio Mané", "Ismaïla Sarr", "Idrissa Gueye", "Kalidou Koulibaly",
+        "Édouard Mendy", "Krépin Diatta", "Cheikhou Kouyaté", "Aliou Cissé"
+    ],
+    "Egypt": [
+        "Mohamed Salah", "Ahmed El Mohamady", "Emad Meteb", "Abdelmonem Mohamed",
+        "Tarek Hamed", "Mohamed Elneny", "Amr El Soleya", "Essam El Hadary"
+    ],
+    "South Africa": [
+        "Percy Tau", "Thami Mkhize", "Ronwen Williams", "Lyle Foster",
+        "Bongani Zungu", "Itumeleng Khune", "Thembi Kgatlana", "Khulekani Ndlela"
+    ],
+    "Cameroon": [
+        "Samuel Eto'o", "Benjamin Moukandjo", "Stéphane Mbia", "Yaya Toure",
+        "Aurelien Chedjou", "Jean Makoun", "Landry N'Guemo", "Choupo-Moting"
+    ],
+    "Algeria": [
+        "Riyad Mahrez", "Yacine Brahimi", "Sofiane Feghouli", "Abdelmoamen Djabou",
+        "Djamel Benlamri", "Mohamed Bentaleb", "Faouzi Ghoulam", "Hakim Ziyech"
+    ],
+    "Croatia": [
+        "Luka Modrić", "Ivan Perišić", "Mateo Kovačić", "Dejan Lovren",
+        "Domagoj Vida", "Ante Ćorić", "Ante Rebić", "Marko Marić"
+    ],
+    "Belgium (Full)": [
+        "Kevin De Bruyne", "Eden Hazard", "Romelu Lukaku", "Jeremy Doku",
+        "Youri Tielemans", "Jan Vertonghen", "Thomas Meunier", "Axel Witsel"
+    ],
+    "Italy (Full)": [
+        "Ciro Immobile", "Federico Chiesa", "Marco Verratti", "Giorgio Chiellini",
+        "Lorenzo Insigne", "Matteo Politano", "Jorginho", "Alessandro Florenzi"
+    ],
+    "Netherlands (Full)": [
+        "Memphis Depay", "Frenkie de Jong", "Virgil van Dijk", "Denzel Dumfries",
+        "Steven Bergwijn", "Marten de Roon", "Daley Blind", "Cody Gakpo"
+    ],
+    "Poland": [
+        "Robert Lewandowski", "Piotr Zieliński", "Arkadiusz Milik", "Kamil Grosicki",
+        "Grzegorz Krychowiak", "Łukasz Fabiański", "Bartosz Bereszyński", "Thiago Silva"
+    ],
+    "Portugal (Full)": [
+        "Cristiano Ronaldo", "Bruno Fernandes", "Bernardo Silva", "João Félix",
+        "Diogo Jota", "Rúben Dias", "Pepe", "William Carvalho"
+    ],
 }
+
+# Flatten all player names with their teams
+all_players = {}
+for team, players in official_squads.items():
+    for player in players:
+        if player not in all_players:
+            all_players[player] = team.replace(" (Squad)", "").replace(" (Full)", "")
+
+# Convert to sorted list for dropdown
+player_list = sorted(list(all_players.keys()))
 
 # Team strength ratings (for statistical model)
 team_ratings = {
@@ -165,9 +354,6 @@ all_teams = []
 for region, teams in teams_data.items():
     all_teams.extend(teams)
 
-# Add Scotland to available teams (even though not qualified, for prediction purposes)
-all_teams_with_scotland = all_teams + ["Scotland"]
-
 # Placement options
 placement_options = ["Group Stage", "Round of 16", "Quarterfinals", "Semifinals", "Finals", "Champion"]
 
@@ -207,7 +393,7 @@ if page == "🏠 Home":
     **Go to the "🎯 My Predictions" page to:**
     - 🥇 Pick the tournament winner
     - 🥈 Select the two finalists
-    - ⚽ Choose the top scorer
+    - ⚽ Choose the top scorer from official team squads
     - 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Predict England's final placement
     - 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Predict Scotland's final placement
     
@@ -261,13 +447,18 @@ elif page == "🎯 My Predictions":
     with col2:
         st.markdown("#### Additional Predictions")
         
-        # Top Scorer
+        # Top Scorer - From official squads
         top_scorer = st.selectbox(
-            "⚽ Who will be the top scorer?",
-            list(top_scorers_db.keys()),
+            "⚽ Who will be the top scorer? (From Official Squads)",
+            player_list,
             index=0,
             key="scorer_select"
         )
+        
+        # Display player's team
+        if top_scorer in all_players:
+            scorer_team = all_players[top_scorer]
+            st.caption(f"Team: {scorer_team}")
         
         # England placement
         england_placement = st.selectbox(
@@ -304,6 +495,7 @@ elif page == "🎯 My Predictions":
                     "finalist1": finalist1,
                     "finalist2": finalist2,
                     "top_scorer": top_scorer,
+                    "top_scorer_team": all_players.get(top_scorer, "Unknown"),
                     "england_placement": england_placement,
                     "scotland_placement": scotland_placement,
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -343,7 +535,7 @@ elif page == "🎯 My Predictions":
             <div class="user-prediction-card">
                 <h3>⚽ Top Scorer</h3>
                 <h2>{pred['top_scorer']}</h2>
-                <p>{top_scorers_db[pred['top_scorer']]['team']}</p>
+                <p>{pred['top_scorer_team']}</p>
             </div>
             """, unsafe_allow_html=True)
             
@@ -521,7 +713,7 @@ elif page == "💾 History":
         
         with col2:
             st.markdown("#### Additional Predictions")
-            st.write(f"**⚽ Top Scorer:** {pred['top_scorer']} ({top_scorers_db[pred['top_scorer']]['team']})")
+            st.write(f"**⚽ Top Scorer:** {pred['top_scorer']} ({pred['top_scorer_team']})")
             st.write(f"**🏴󠁧󠁢󠁥󠁮󠁧󠁿 England:** {pred['england_placement']}")
             st.write(f"**🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland:** {pred['scotland_placement']}")
         
