@@ -30,6 +30,32 @@ st.markdown("""
         border-radius: 8px;
         margin: 10px 0;
     }
+    .featured-prediction {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin: 20px 0;
+        text-align: center;
+    }
+    .featured-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .medal-section {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+    .medal-item {
+        background: rgba(255,255,255,0.1);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px;
+        min-width: 150px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -126,13 +152,69 @@ all_teams = []
 for region, teams in teams_data.items():
     all_teams.extend(teams)
 
+# FEATURED PREDICTIONS SECTION - HOME PAGE
+st.markdown("""
+<div class="featured-prediction">
+    <div class="featured-title">🏆 Richards' Official Tournament Predictions 🏆</div>
+    <div style="font-size: 18px; margin-bottom: 15px;">Expert Analysis for World Cup 2026</div>
+</div>
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: white; padding: 20px; border-radius: 10px; text-align: center;">
+        <div style="font-size: 14px; margin-bottom: 10px;">🥇 CHAMPION</div>
+        <div style="font-size: 28px; font-weight: bold; margin-bottom: 5px;">Brazil</div>
+        <div style="font-size: 12px; opacity: 0.9;">Rating: 95/100</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%); color: white; padding: 20px; border-radius: 10px; text-align: center;">
+        <div style="font-size: 14px; margin-bottom: 10px;">🥈 RUNNER-UP</div>
+        <div style="font-size: 28px; font-weight: bold; margin-bottom: 5px;">France</div>
+        <div style="font-size: 12px; opacity: 0.9;">Rating: 93/100</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #CD7F32 0%, #B87333 100%); color: white; padding: 20px; border-radius: 10px; text-align: center;">
+        <div style="font-size: 14px; margin-bottom: 10px;">🥉 THIRD PLACE</div>
+        <div style="font-size: 28px; font-weight: bold; margin-bottom: 5px;">Argentina</div>
+        <div style="font-size: 12px; opacity: 0.9;">Rating: 92/100</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("### Other Semifinalists")
+sf_col1, sf_col2 = st.columns(2)
+with sf_col1:
+    st.write("• **England** (90/100)")
+    st.write("• **Germany** (89/100)")
+with sf_col2:
+    st.write("• **Spain** (88/100)")
+    st.write("• **Netherlands** (87/100)")
+
+st.markdown("---")
+
+# Button to navigate to predictions
+col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+with col_btn2:
+    if st.button("🎯 Generate Your Own Predictions", type="primary", use_container_width=True):
+        st.switch_page("pages/predictions.py" if st.file_uploader else None)
+
+st.markdown("---")
+
 # Sidebar for user input
 st.sidebar.header("⚙️ Settings & Controls")
 
 # Navigation
 page = st.sidebar.radio(
     "Select Page:",
-    ["🎯 Predictions", "📊 Statistics", "🏆 Tournament Bracket", "📈 Team Analytics", "🎲 Head to Head", "⚽ Top Scorer", "💾 History"]
+    ["🏠 Home", "🎯 Predictions", "📊 Statistics", "🏆 Tournament Bracket", "📈 Team Analytics", "🎲 Head to Head", "⚽ Top Scorer", "💾 History"]
 )
 
 # Common settings for all pages
@@ -150,8 +232,12 @@ prediction_method = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 
+# PAGE: HOME
+if page == "🏠 Home":
+    st.stop()
+
 # PAGE: PREDICTIONS
-if page == "🎯 Predictions":
+elif page == "🎯 Predictions":
     st.subheader("🔮 Tournament Predictions")
     
     col1, col2 = st.columns([2, 1])
