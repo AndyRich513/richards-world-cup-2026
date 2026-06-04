@@ -1,14 +1,114 @@
 import streamlit as st
 from datetime import datetime
 import pandas as pd
-import json
-import os
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+# ============================================================================
+# FIREBASE SETUP
+# ============================================================================
+
+@st.cache_resource
+def init_firebase():
+    """Initialize Firebase connection"""
+    try:
+        # Check if Firebase app is already initialized
+        firebase_admin.get_app()
+    except ValueError:
+        # Firebase app not initialized, initialize it
+        try:
+            # Try to load from Streamlit secrets (for cloud deployment)
+            firebase_config = st.secrets["firebase"]
+            cred = credentials.Certificate(firebase_config)
+        except (KeyError, FileNotFoundError):
+            # Fallback to local JSON file
+            try:
+                cred = credentials.Certificate("firebase_credentials.json")
+            except FileNotFoundError:
+                st.error("❌ Firebase credentials not found. Please configure Firebase.")
+                st.stop()
+        
+        firebase_admin.initialize_app(cred)
+    
+    return firestore.client()
+
+# Initialize Firestore
+try:
+    db = init_firebase()
+    firebase_enabled = True
+except Exception as e:
+    st.warning(f"⚠️ Firebase not configured. Using local storage only. Error: {e}")
+    firebase_enabled = False
+    db = None
+
+# ============================================================================
+# FIREBASE FUNCTIONS
+# ============================================================================
+
+def save_prediction_to_firebase(prediction):
+    """Save prediction to Firebase Firestore"""
+    if not firebase_enabled:
+        return False
+    
+    try:
+        # Check if user already has a prediction and update it
+        existing = db.collection("predictions").where("name", "==", prediction["name"]).stream()
+        existing_docs = list(existing)
+        
+        if existing_docs:
+            # Update existing prediction
+            db.collection("predictions").document(existing_docs[0].id).update(prediction)
+        else:
+            # Add new prediction
+            db.collection("predictions").add(prediction)
+        
+        return True
+    except Exception as e:
+        st.error(f"Error saving to Firebase: {e}")
+        return False
+
+def get_predictions_from_firebase():
+    """Get all predictions from Firebase Firestore"""
+    if not firebase_enabled:
+        return []
+    
+    try:
+        docs = db.collection("predictions").stream()
+        predictions = [doc.to_dict() for doc in docs]
+        return predictions
+    except Exception as e:
+        st.error(f"Error fetching from Firebase: {e}")
+        return []
+
+def delete_prediction_from_firebase(user_name):
+    """Delete prediction from Firebase"""
+    if not firebase_enabled:
+        return False
+    
+    try:
+        docs = db.collection("predictions").where("name", "==", user_name).stream()
+        for doc in docs:
+            db.collection("predictions").document(doc.id).delete()
+        return True
+    except Exception as e:
+        st.error(f"Error deleting from Firebase: {e}")
+        return False
+
+# ============================================================================
+# PAGE CONFIGURATION
+# ============================================================================
 
 st.set_page_config(page_title="The Richards World Cup 2026 Predictor", page_icon="🏆", layout="wide")
 
 st.title("🏆 The Richards World Cup 2026 Predictor")
 
-# Initialize session state for local storage
+# Firebase status indicator
+if firebase_enabled:
+    st.sidebar.success("✅ Connected to Firebase")
+else:
+    st.sidebar.warning("⚠️ Using local storage only")
+
+# Initialize session state for local storage fallback
 if 'predictions' not in st.session_state:
     st.session_state.predictions = []
 if 'current_user' not in st.session_state:
@@ -67,22 +167,34 @@ if page == "Make Prediction":
                     "winner": winner,
                     "runner_up": runner_up,
                     "top_scorer": top_scorer,
-                    "total_goals": total_goals,
+                    "total_goals": int(total_goals),
                     "surprise_team": surprise_team,
-                    "confidence": confidence,
+                    "confidence": int(confidence),
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
                 
-                # Check if user already has a prediction and update it
+                # Save to Firebase (if enabled) and local storage
+                firebase_success = save_prediction_to_firebase(prediction) if firebase_enabled else True
+                
+                # Also update local session state
                 existing = [p for p in st.session_state.predictions if p['name'].lower() == participant_name.lower()]
                 if existing:
                     st.session_state.predictions = [p for p in st.session_state.predictions if p['name'].lower() != participant_name.lower()]
                 
                 st.session_state.predictions.append(prediction)
-                st.success("✅ Prediction saved successfully!")
+                
+                if firebase_success:
+                    st.success("✅ Prediction saved successfully!" + (" (Synced to Firebase)" if firebase_enabled else ""))
+                else:
+                    st.success("✅ Prediction saved locally!")
         
         with col2:
             if st.button("🔄 Clear Prediction", use_container_width=True):
+                # Delete from Firebase if enabled
+                if firebase_enabled:
+                    delete_prediction_from_firebase(participant_name)
+                
+                # Delete from local storage
                 st.session_state.predictions = [p for p in st.session_state.predictions if p['name'].lower() != participant_name.lower()]
                 st.warning("Prediction cleared!")
 
@@ -101,12 +213,24 @@ elif page == "Leaderboard":
         {"name": "Alex Martinez", "confidence": 88, "winner": "Spain", "timestamp": "2026-06-03 11:00:00"},
     ]
     
-    # Combine mock data with actual predictions
-    all_predictions = mock_predictions + st.session_state.predictions
+    # Get predictions from Firebase or use local storage
+    firebase_predictions = get_predictions_from_firebase() if firebase_enabled else []
     
-    if all_predictions:
+    # Combine mock data with actual predictions
+    all_predictions = mock_predictions + firebase_predictions + st.session_state.predictions
+    
+    # Remove duplicates (keep Firebase version if exists)
+    seen_names = set()
+    unique_predictions = []
+    for pred in all_predictions:
+        name_lower = pred['name'].lower()
+        if name_lower not in seen_names:
+            seen_names.add(name_lower)
+            unique_predictions.append(pred)
+    
+    if unique_predictions:
         # Sort by confidence descending
-        sorted_predictions = sorted(all_predictions, key=lambda x: x['confidence'], reverse=True)
+        sorted_predictions = sorted(unique_predictions, key=lambda x: x['confidence'], reverse=True)
         
         # Create leaderboard dataframe
         leaderboard_data = []
@@ -124,7 +248,12 @@ elif page == "Leaderboard":
         # Display with styling
         st.dataframe(df_leaderboard, use_container_width=True, hide_index=True)
         
-        st.metric("Total Participants", len(all_predictions))
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Total Participants", len(unique_predictions))
+        with col2:
+            avg_confidence = sum([p['confidence'] for p in unique_predictions]) / len(unique_predictions)
+            st.metric("Avg Confidence", f"{avg_confidence:.1f}%")
     else:
         st.info("No predictions yet. Be the first to make a prediction! 🎯")
 
@@ -168,16 +297,28 @@ elif page == "All Predictions":
         },
     ]
     
-    # Combine with actual predictions
-    all_predictions = mock_predictions + st.session_state.predictions
+    # Get predictions from Firebase or use local storage
+    firebase_predictions = get_predictions_from_firebase() if firebase_enabled else []
     
-    if all_predictions:
+    # Combine with actual predictions
+    all_predictions = mock_predictions + firebase_predictions + st.session_state.predictions
+    
+    # Remove duplicates
+    seen_names = set()
+    unique_predictions = []
+    for pred in all_predictions:
+        name_lower = pred['name'].lower()
+        if name_lower not in seen_names:
+            seen_names.add(name_lower)
+            unique_predictions.append(pred)
+    
+    if unique_predictions:
         # Create tabs for different views
         tab1, tab2 = st.tabs(["Card View", "Table View"])
         
         with tab1:
             st.write("### Prediction Cards")
-            for idx, pred in enumerate(all_predictions, 1):
+            for idx, pred in enumerate(unique_predictions, 1):
                 with st.container(border=True):
                     col1, col2, col3 = st.columns([2, 2, 1])
                     
@@ -204,7 +345,7 @@ elif page == "All Predictions":
         
         with tab2:
             st.write("### All Predictions Table")
-            df_all = pd.DataFrame(all_predictions)
+            df_all = pd.DataFrame(unique_predictions)
             # Select columns to display
             display_cols = ['name', 'winner', 'runner_up', 'top_scorer', 'confidence', 'timestamp']
             df_display = df_all[display_cols].rename(columns={
@@ -223,8 +364,9 @@ elif page == "All Predictions":
 # FOOTER
 # ============================================================================
 st.divider()
-st.markdown("""
+storage_info = "Firebase + Local" if firebase_enabled else "Local session-based"
+st.markdown(f"""
 <div style='text-align: center; color: #999; font-size: 12px; padding: 20px;'>
-    🏆 The Richards World Cup 2026 Predictor | Data stored locally (session-based)
+    🏆 The Richards World Cup 2026 Predictor | Data stored: {storage_info}
 </div>
 """, unsafe_allow_html=True)
