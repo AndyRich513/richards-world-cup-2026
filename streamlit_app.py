@@ -94,6 +94,49 @@ teams_data = {
     "Asia": ["Japan", "South Korea", "Australia", "Iran", "Saudi Arabia", "Qatar", "Uzbekistan"],
 }
 
+# Country flag emojis
+country_flags = {
+    "Brazil": "🇧🇷",
+    "France": "🇫🇷",
+    "Argentina": "🇦🇷",
+    "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "Germany": "🇩🇪",
+    "Spain": "🇪🇸",
+    "Netherlands": "🇳🇱",
+    "Belgium": "🇧🇪",
+    "Italy": "🇮🇹",
+    "Portugal": "🇵🇹",
+    "Croatia": "🇭🇷",
+    "Poland": "🇵🇱",
+    "USA": "🇺🇸",
+    "Mexico": "🇲🇽",
+    "Uruguay": "🇺🇾",
+    "Colombia": "🇨🇴",
+    "Chile": "🇨🇱",
+    "Japan": "🇯🇵",
+    "South Korea": "🇰🇷",
+    "Australia": "🇦🇺",
+    "Canada": "🇨🇦",
+    "Ecuador": "🇪🇨",
+    "Peru": "🇵🇪",
+    "Paraguay": "🇵🇾",
+    "Egypt": "🇪🇬",
+    "Morocco": "🇲🇦",
+    "Nigeria": "🇳🇬",
+    "Senegal": "🇸🇳",
+    "South Africa": "🇿🇦",
+    "Cameroon": "🇨🇲",
+    "Algeria": "🇩🇿",
+    "Iran": "🇮🇷",
+    "Saudi Arabia": "🇸🇦",
+    "Qatar": "🇶🇦",
+    "Uzbekistan": "🇺🇿",
+    "Costa Rica": "🇨🇷",
+    "Panama": "🇵🇦",
+    "Jamaica": "🇯🇲",
+    "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+}
+
 # Official World Cup 2026 Squads - Top Scorer Candidates
 official_squads = {
     "Brazil": [
@@ -156,9 +199,6 @@ official_squads = {
         "Guillermo Ochoa", "Héctor Moreno", "César Montes", "Néstor Araujo",
         "Miguel Layún", "Edson Álvarez", "Andrés Guardado", "Orbelín Pineda"
     ],
-    "England (Squad)": [
-        "Harry Maguire", "Chloe Kelly", "James Ward-Prowse", "Aaron Ramsdale"
-    ],
     "Canada": [
         "Alphonso Davies", "Jonathan David", "Cyle Larin", "Stephen Eustáquio",
         "Athanasios Rantos", "Richie Laryea", "Ike Ugbo", "Tajon Buchanan"
@@ -178,10 +218,6 @@ official_squads = {
     "Uruguay": [
         "Luis Suárez", "Darwin Núñez", "Federico Valverde", "Giorgian De Arrascaeta",
         "Matías Vecino", "José María Giménez", "Diego Godín", "Martín Cáceres"
-    ],
-    "Argentina (Full Squad)": [
-        "Lionel Messi", "Sergio Agüero", "Alejandro Garnacho", "Julián Álvarez",
-        "Gonzalo Montiel", "Lisandro Martínez", "Alexis Mac Allister", "Enzo Fernández"
     ],
     "Colombia": [
         "Radamel Falcao", "Duvan Zapata", "Luis Muriel", "James Rodríguez",
@@ -203,17 +239,9 @@ official_squads = {
         "Moisés Caicedo", "Enner Valencia", "Gonzalo Plata", "Jordan Sierra",
         "Cristian Ramírez", "Jhojan Montoya", "Carlos Gruezo", "Pervis Estupiñán"
     ],
-    "France (Full)": [
-        "Kylian Mbappé", "Antoine Griezmann", "Olivier Giroud", "Ousmane Dembélé",
-        "Eduardo Camavinga", "Lucas Hernández", "Benjamin Pavard", "Aurélien Tchouaméni"
-    ],
-    "Germany (Full)": [
-        "Florian Wirtz", "Kai Havertz", "Jamal Musiala", "Serge Gnabry",
-        "Thomas Müller", "Ilkay Gündoğan", "Joshua Kimmich", "Mats Hummels"
-    ],
-    "Spain (Full)": [
-        "Pedri", "Gavi", "Ferran Torres", "Sergio Busquets", "Álvaro Morata",
-        "Gerard Moreno", "Pablo Sarabia", "Rodri", "Koke"
+    "Poland": [
+        "Robert Lewandowski", "Piotr Zieliński", "Arkadiusz Milik", "Kamil Grosicki",
+        "Grzegorz Krychowiak", "Łukasz Fabiański", "Bartosz Bereszyński", "Thiago Silva"
     ],
     "Japan": [
         "Hidetoshi Nakata", "Reo Hatate", "Marcus Tulius Tanaka", "Kōki Ogawa",
@@ -271,41 +299,25 @@ official_squads = {
         "Riyad Mahrez", "Yacine Brahimi", "Sofiane Feghouli", "Abdelmoamen Djabou",
         "Djamel Benlamri", "Mohamed Bentaleb", "Faouzi Ghoulam", "Hakim Ziyech"
     ],
-    "Croatia": [
-        "Luka Modrić", "Ivan Perišić", "Mateo Kovačić", "Dejan Lovren",
-        "Domagoj Vida", "Ante Ćorić", "Ante Rebić", "Marko Marić"
-    ],
-    "Belgium (Full)": [
-        "Kevin De Bruyne", "Eden Hazard", "Romelu Lukaku", "Jeremy Doku",
-        "Youri Tielemans", "Jan Vertonghen", "Thomas Meunier", "Axel Witsel"
-    ],
-    "Italy (Full)": [
-        "Ciro Immobile", "Federico Chiesa", "Marco Verratti", "Giorgio Chiellini",
-        "Lorenzo Insigne", "Matteo Politano", "Jorginho", "Alessandro Florenzi"
-    ],
-    "Netherlands (Full)": [
-        "Memphis Depay", "Frenkie de Jong", "Virgil van Dijk", "Denzel Dumfries",
-        "Steven Bergwijn", "Marten de Roon", "Daley Blind", "Cody Gakpo"
-    ],
-    "Poland": [
-        "Robert Lewandowski", "Piotr Zieliński", "Arkadiusz Milik", "Kamil Grosicki",
-        "Grzegorz Krychowiak", "Łukasz Fabiański", "Bartosz Bereszyński", "Thiago Silva"
-    ],
-    "Portugal (Full)": [
-        "Cristiano Ronaldo", "Bruno Fernandes", "Bernardo Silva", "João Félix",
-        "Diogo Jota", "Rúben Dias", "Pepe", "William Carvalho"
-    ],
 }
 
-# Flatten all player names with their teams
+# Flatten all player names with their teams and create display format
 all_players = {}
+player_display_options = []
+
 for team, players in official_squads.items():
+    clean_team_name = team.replace(" (Squad)", "").replace(" (Full)", "")
+    flag = country_flags.get(clean_team_name, "🌍")
+    
     for player in players:
         if player not in all_players:
-            all_players[player] = team.replace(" (Squad)", "").replace(" (Full)", "")
+            all_players[player] = clean_team_name
+            # Create display format: "Flag Player Name - Country"
+            display_text = f"{flag} {player} - {clean_team_name}"
+            player_display_options.append(display_text)
 
-# Convert to sorted list for dropdown
-player_list = sorted(list(all_players.keys()))
+# Sort the display options alphabetically
+player_display_options = sorted(player_display_options)
 
 # Team strength ratings (for statistical model)
 team_ratings = {
@@ -447,18 +459,24 @@ elif page == "🎯 My Predictions":
     with col2:
         st.markdown("#### Additional Predictions")
         
-        # Top Scorer - From official squads
-        top_scorer = st.selectbox(
+        # Top Scorer - From official squads with flag and country
+        top_scorer_display = st.selectbox(
             "⚽ Who will be the top scorer? (From Official Squads)",
-            player_list,
+            player_display_options,
             index=0,
             key="scorer_select"
         )
         
-        # Display player's team
-        if top_scorer in all_players:
-            scorer_team = all_players[top_scorer]
-            st.caption(f"Team: {scorer_team}")
+        # Extract player name and team from display format
+        # Format: "🇧🇷 Neymar - Brazil"
+        parts = top_scorer_display.split(" - ")
+        scorer_team = parts[-1].strip()
+        player_name_with_flag = " - ".join(parts[:-1]).strip()
+        # Remove flag emoji from player name
+        player_name = player_name_with_flag.replace("🇧🇷", "").replace("🇫🇷", "").replace("🇦🇷", "").replace("🏴󠁧󠁢󠁥󠁮󠁧󠁿", "").replace("🇩🇪", "").replace("🇪🇸", "").replace("🇳🇱", "").replace("🇧🇪", "").replace("🇮🇹", "").replace("🇵🇹", "").replace("🇭🇷", "").replace("🇵🇱", "").replace("🇺🇸", "").replace("🇲🇽", "").replace("🇺🇾", "").replace("🇨🇴", "").replace("🇨🇱", "").replace("🇯🇵", "").replace("🇰🇷", "").replace("🇦🇺", "").replace("🇨🇦", "").replace("🇪🇨", "").replace("🇵🇪", "").replace("🇵🇾", "").replace("🇪🇬", "").replace("🇲🇦", "").replace("🇳🇬", "").replace("🇸🇳", "").replace("🇿🇦", "").replace("🇨🇲", "").replace("🇩🇿", "").replace("🇮🇷", "").replace("🇸🇦", "").replace("🇶🇦", "").replace("🇺🇿", "").replace("🇨🇷", "").replace("🇵🇦", "").replace("🇯🇲", "").replace("🏴󠁧󠁢󠁳󠁣󠁴󠁿", "").strip()
+        
+        flag = country_flags.get(scorer_team, "🌍")
+        st.caption(f"{flag} **{scorer_team}**")
         
         # England placement
         england_placement = st.selectbox(
@@ -494,8 +512,8 @@ elif page == "🎯 My Predictions":
                     "winner": winner,
                     "finalist1": finalist1,
                     "finalist2": finalist2,
-                    "top_scorer": top_scorer,
-                    "top_scorer_team": all_players.get(top_scorer, "Unknown"),
+                    "top_scorer": player_name,
+                    "top_scorer_team": scorer_team,
                     "england_placement": england_placement,
                     "scotland_placement": scotland_placement,
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -516,26 +534,30 @@ elif page == "🎯 My Predictions":
         col_card1, col_card2 = st.columns(2)
         
         with col_card1:
+            winner_flag = country_flags.get(pred['winner'], "🌍")
             st.markdown(f"""
             <div class="user-prediction-card">
                 <h3>🏆 Tournament Winner</h3>
-                <h2>{pred['winner']}</h2>
+                <h2>{winner_flag} {pred['winner']}</h2>
             </div>
             """, unsafe_allow_html=True)
             
+            finalist1_flag = country_flags.get(pred['finalist1'], "🌍")
+            finalist2_flag = country_flags.get(pred['finalist2'], "🌍")
             st.markdown(f"""
             <div class="user-prediction-card">
                 <h3>🥇 Finalists</h3>
-                <h4>{pred['finalist1']} vs {pred['finalist2']}</h4>
+                <h4>{finalist1_flag} {pred['finalist1']} vs {finalist2_flag} {pred['finalist2']}</h4>
             </div>
             """, unsafe_allow_html=True)
         
         with col_card2:
+            scorer_flag = country_flags.get(pred['top_scorer_team'], "🌍")
             st.markdown(f"""
             <div class="user-prediction-card">
                 <h3>⚽ Top Scorer</h3>
                 <h2>{pred['top_scorer']}</h2>
-                <p>{pred['top_scorer_team']}</p>
+                <p>{scorer_flag} {pred['top_scorer_team']}</p>
             </div>
             """, unsafe_allow_html=True)
             
@@ -604,7 +626,8 @@ elif page == "🏆 Tournament Bracket":
             with cols[idx % 4]:
                 st.markdown(f"**Group {chr(65+idx)}**")
                 for team in group:
-                    st.write(f"• {team}")
+                    flag = country_flags.get(team, "🌍")
+                    st.write(f"{flag} {team}")
 
 # PAGE: TEAM ANALYTICS
 elif page == "📈 Team Analytics":
@@ -614,6 +637,7 @@ elif page == "📈 Team Analytics":
     
     if selected_team:
         rating = team_ratings.get(selected_team, 50)
+        flag = country_flags.get(selected_team, "🌍")
         
         col1, col2 = st.columns(2)
         
@@ -678,14 +702,18 @@ elif page == "🎲 Head to Head":
         st.markdown("---")
         st.subheader("⚽ Match Result")
         
+        flag1 = country_flags.get(team1, "🌍")
+        flag2 = country_flags.get(team2, "🌍")
+        winner_flag = country_flags.get(winner, "🌍")
+        
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.metric(f"{team1}", f"{int(prob1)}% chance")
+            st.metric(f"{flag1} {team1}", f"{int(prob1)}% chance")
         with col2:
-            st.success(f"**WINNER: {winner}**", icon="🏆")
+            st.success(f"**WINNER: {winner_flag} {winner}**", icon="🏆")
         with col3:
-            st.metric(f"{team2}", f"{int(prob2)}% chance")
+            st.metric(f"{flag2} {team2}", f"{int(prob2)}% chance")
     elif team1 == team2:
         st.warning("Please select two different teams!")
 
@@ -703,17 +731,22 @@ elif page == "💾 History":
         # Display as detailed card
         st.markdown("### 📋 Your Tournament Predictions")
         
+        winner_flag = country_flags.get(pred['winner'], "🌍")
+        finalist1_flag = country_flags.get(pred['finalist1'], "🌍")
+        finalist2_flag = country_flags.get(pred['finalist2'], "🌍")
+        scorer_flag = country_flags.get(pred['top_scorer_team'], "🌍")
+        
         col1, col2 = st.columns(2)
         
         with col1:
             st.markdown("#### Tournament Results")
-            st.write(f"**🥇 Champion:** {pred['winner']}")
-            st.write(f"**🥈 Finalist 1:** {pred['finalist1']}")
-            st.write(f"**🥈 Finalist 2:** {pred['finalist2']}")
+            st.write(f"**🥇 Champion:** {winner_flag} {pred['winner']}")
+            st.write(f"**🥈 Finalist 1:** {finalist1_flag} {pred['finalist1']}")
+            st.write(f"**🥈 Finalist 2:** {finalist2_flag} {pred['finalist2']}")
         
         with col2:
             st.markdown("#### Additional Predictions")
-            st.write(f"**⚽ Top Scorer:** {pred['top_scorer']} ({pred['top_scorer_team']})")
+            st.write(f"**⚽ Top Scorer:** {pred['top_scorer']} ({scorer_flag} {pred['top_scorer_team']})")
             st.write(f"**🏴󠁧󠁢󠁥󠁮󠁧󠁿 England:** {pred['england_placement']}")
             st.write(f"**🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland:** {pred['scotland_placement']}")
         
