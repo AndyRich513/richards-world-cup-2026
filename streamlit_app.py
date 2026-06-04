@@ -56,6 +56,13 @@ st.markdown("""
         margin: 10px;
         min-width: 150px;
     }
+    .user-prediction-card {
+        background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 15px 0;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -71,6 +78,9 @@ if 'bracket_data' not in st.session_state:
 
 if 'top_scorer_pick' not in st.session_state:
     st.session_state.top_scorer_pick = None
+
+if 'user_manual_prediction' not in st.session_state:
+    st.session_state.user_manual_prediction = None
 
 if 'current_page' not in st.session_state:
     st.session_state.current_page = "🏠 Home"
@@ -155,13 +165,19 @@ all_teams = []
 for region, teams in teams_data.items():
     all_teams.extend(teams)
 
+# Add Scotland to available teams (even though not qualified, for prediction purposes)
+all_teams_with_scotland = all_teams + ["Scotland"]
+
+# Placement options
+placement_options = ["Group Stage", "Round of 16", "Quarterfinals", "Semifinals", "Finals", "Champion"]
+
 # Sidebar for user input
 st.sidebar.header("⚙️ Settings & Controls")
 
 # Navigation
 page = st.sidebar.radio(
     "Select Page:",
-    ["🏠 Home", "🎯 Predictions", "📊 Statistics", "🏆 Tournament Bracket", "📈 Team Analytics", "🎲 Head to Head", "⚽ Top Scorer", "💾 History"]
+    ["🏠 Home", "🎯 My Predictions", "📊 Statistics", "🏆 Tournament Bracket", "📈 Team Analytics", "🎲 Head to Head", "💾 History"]
 )
 
 # Common settings for all pages
@@ -172,193 +188,173 @@ selected_teams = st.sidebar.multiselect(
     key="selected_teams_main"
 )
 
-prediction_method = st.sidebar.radio(
-    "Prediction Method:",
-    ["Random Predictor", "Favorites", "Statistical Model", "Expert Algorithm"]
-)
-
 st.sidebar.markdown("---")
 
 # PAGE: HOME
 if page == "🏠 Home":
-    # FEATURED PREDICTIONS SECTION - HOME PAGE
     st.markdown("""
     <div class="featured-prediction">
-        <div class="featured-title">🏆 Richards' Official Tournament Predictions 🏆</div>
-        <div style="font-size: 18px; margin-bottom: 15px;">Expert Analysis for World Cup 2026</div>
+        <div class="featured-title">🏆 Make Your World Cup 2026 Predictions! 🏆</div>
+        <div style="font-size: 18px; margin-bottom: 15px;">Create Your Custom Tournament Forecast</div>
     </div>
     """, unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns(3)
+    st.markdown("""
+    ### Welcome to the Richards World Cup 2026 Predictor!
     
-    with col1:
-        st.markdown("""
-        <div style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: white; padding: 20px; border-radius: 10px; text-align: center;">
-            <div style="font-size: 14px; margin-bottom: 10px;">🥇 CHAMPION</div>
-            <div style="font-size: 28px; font-weight: bold; margin-bottom: 5px;">Brazil</div>
-            <div style="font-size: 12px; opacity: 0.9;">Rating: 95/100</div>
-        </div>
-        """, unsafe_allow_html=True)
+    This app allows you to make detailed predictions about the FIFA World Cup 2026. 
     
-    with col2:
-        st.markdown("""
-        <div style="background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%); color: white; padding: 20px; border-radius: 10px; text-align: center;">
-            <div style="font-size: 14px; margin-bottom: 10px;">🥈 RUNNER-UP</div>
-            <div style="font-size: 28px; font-weight: bold; margin-bottom: 5px;">France</div>
-            <div style="font-size: 12px; opacity: 0.9;">Rating: 93/100</div>
-        </div>
-        """, unsafe_allow_html=True)
+    **Go to the "🎯 My Predictions" page to:**
+    - 🥇 Pick the tournament winner
+    - 🥈 Select the two finalists
+    - ⚽ Choose the top scorer
+    - 🏴󠁧󠁢󠁥󠁮󠁧󠁿 Predict England's final placement
+    - 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Predict Scotland's final placement
     
-    with col3:
-        st.markdown("""
-        <div style="background: linear-gradient(135deg, #CD7F32 0%, #B87333 100%); color: white; padding: 20px; border-radius: 10px; text-align: center;">
-            <div style="font-size: 14px; margin-bottom: 10px;">🥉 THIRD PLACE</div>
-            <div style="font-size: 28px; font-weight: bold; margin-bottom: 5px;">Argentina</div>
-            <div style="font-size: 12px; opacity: 0.9;">Rating: 92/100</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("### Other Semifinalists")
-    sf_col1, sf_col2 = st.columns(2)
-    with sf_col1:
-        st.write("• **England** (90/100)")
-        st.write("• **Germany** (89/100)")
-    with sf_col2:
-        st.write("• **Spain** (88/100)")
-        st.write("• **Netherlands** (87/100)")
+    Your predictions will be saved and displayed in the History page!
+    """)
     
     st.markdown("---")
     
-    # Button to navigate to predictions
     col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
     with col_btn2:
-        if st.button("🎯 Generate Your Own Predictions", type="primary", use_container_width=True):
-            page = "🎯 Predictions"
+        if st.button("🎯 Go to My Predictions", type="primary", use_container_width=True):
+            st.session_state.current_page = "🎯 My Predictions"
 
-# PAGE: PREDICTIONS
-if page == "🎯 Predictions":
-    st.subheader("🔮 Tournament Predictions")
+# PAGE: MY PREDICTIONS
+elif page == "🎯 My Predictions":
+    st.subheader("🎯 Make Your Tournament Predictions")
     
-    col1, col2 = st.columns([2, 1])
+    st.markdown("### Complete Your Prediction Form")
+    st.info("Fill in all the fields below to save your World Cup 2026 predictions!")
+    
+    # Create form with all prediction fields
+    col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### Generate Your Custom Predictions")
-        col_a, col_b = st.columns(2)
+        st.markdown("#### Tournament Results")
         
-        with col_a:
-            num_semi_finalists = st.slider("Number of teams in semifinals:", 4, 8, 4)
+        # Tournament Winner
+        winner = st.selectbox(
+            "🥇 Who will win the tournament?",
+            all_teams,
+            index=0,
+            key="winner_select"
+        )
         
-        with col_b:
-            include_dark_horse = st.checkbox("Include dark horse pick?", value=False)
+        # Finalist 1
+        finalist1 = st.selectbox(
+            "🥈 First Finalist",
+            all_teams,
+            index=1,
+            key="finalist1_select"
+        )
+        
+        # Finalist 2
+        finalist2 = st.selectbox(
+            "🥈 Second Finalist",
+            all_teams,
+            index=2,
+            key="finalist2_select"
+        )
     
     with col2:
-        st.subheader("📊 Overview")
-        st.metric("Teams Selected", len(selected_teams))
-        st.metric("Prediction Method", prediction_method)
-    
-    if st.button("🎲 Generate Predictions", type="primary"):
+        st.markdown("#### Additional Predictions")
         
-        if prediction_method == "Random Predictor":
-            st.info("🎲 Generating random predictions...")
-            
-            semi_finalists = random.sample(all_teams, num_semi_finalists)
-            finalists = random.sample(semi_finalists, 2)
-            champion = random.choice(finalists)
-            runner_up = [t for t in finalists if t != champion][0]
-            third_place = random.choice([t for t in semi_finalists if t not in finalists])
-            
-            prediction_result = {
-                "method": "Random",
-                "champion": champion,
-                "runner_up": runner_up,
-                "third": third_place,
-                "semi_finalists": semi_finalists,
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            
-        elif prediction_method == "Favorites":
-            st.info("⭐ Predicting based on your selected favorites...")
-            
-            if selected_teams:
-                sorted_favorites = selected_teams[:num_semi_finalists]
-                champion = random.choice(sorted_favorites[:2]) if len(sorted_favorites) >= 2 else sorted_favorites[0]
-                runner_up = random.choice([t for t in sorted_favorites if t != champion])
-                third_place = random.choice([t for t in sorted_favorites if t not in [champion, runner_up]])
-                
-                prediction_result = {
-                    "method": "Favorites",
-                    "champion": champion,
-                    "runner_up": runner_up,
-                    "third": third_place,
-                    "semi_finalists": sorted_favorites,
+        # Top Scorer
+        top_scorer = st.selectbox(
+            "⚽ Who will be the top scorer?",
+            list(top_scorers_db.keys()),
+            index=0,
+            key="scorer_select"
+        )
+        
+        # England placement
+        england_placement = st.selectbox(
+            "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England's finishing position",
+            placement_options,
+            index=3,
+            key="england_select"
+        )
+        
+        # Scotland placement
+        scotland_placement = st.selectbox(
+            "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland's finishing position",
+            placement_options,
+            index=0,
+            key="scotland_select"
+        )
+    
+    st.markdown("---")
+    
+    # Validation and Save Button
+    col_validate1, col_validate2, col_validate3 = st.columns([1, 1, 1])
+    
+    with col_validate2:
+        if st.button("💾 Save My Predictions", type="primary", use_container_width=True):
+            # Validation
+            if winner == finalist1 or winner == finalist2:
+                st.error("❌ Tournament winner cannot be one of the finalists!")
+            elif finalist1 == finalist2:
+                st.error("❌ The two finalists must be different teams!")
+            else:
+                # Save prediction
+                user_prediction = {
+                    "winner": winner,
+                    "finalist1": finalist1,
+                    "finalist2": finalist2,
+                    "top_scorer": top_scorer,
+                    "england_placement": england_placement,
+                    "scotland_placement": scotland_placement,
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
-            else:
-                st.warning("Please select favorite teams first!")
-                prediction_result = None
+                
+                st.session_state.user_manual_prediction = user_prediction
+                st.success("✅ Your predictions have been saved successfully!")
+    
+    # Display saved predictions if any
+    st.markdown("---")
+    
+    if st.session_state.user_manual_prediction:
+        pred = st.session_state.user_manual_prediction
         
-        elif prediction_method == "Statistical Model":
-            st.info("📈 Applying statistical model based on team ratings...")
-            
-            # Sort teams by rating
-            sorted_teams = sorted(all_teams, key=lambda x: team_ratings.get(x, 50), reverse=True)
-            semi_finalists = sorted_teams[:num_semi_finalists]
-            champion = semi_finalists[0]
-            runner_up = semi_finalists[1]
-            third_place = semi_finalists[2]
-            
-            prediction_result = {
-                "method": "Statistical Model",
-                "champion": champion,
-                "runner_up": runner_up,
-                "third": third_place,
-                "semi_finalists": semi_finalists,
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
+        st.markdown("### 📋 Your Saved Predictions")
         
-        else:  # Expert Algorithm
-            st.info("🧠 Applying expert algorithm combining multiple factors...")
-            
-            # Combine statistical ratings with favorites
-            base_teams = sorted([t for t in all_teams if t in selected_teams] + 
-                               [t for t in all_teams[:5] if t not in selected_teams])[:num_semi_finalists]
-            champion = base_teams[0]
-            runner_up = base_teams[1] if len(base_teams) > 1 else random.choice(all_teams)
-            third_place = base_teams[2] if len(base_teams) > 2 else random.choice(all_teams)
-            
-            prediction_result = {
-                "method": "Expert Algorithm",
-                "champion": champion,
-                "runner_up": runner_up,
-                "third": third_place,
-                "semi_finalists": base_teams,
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
+        # Display as cards
+        col_card1, col_card2 = st.columns(2)
         
-        if prediction_result:
-            # Store in history
-            st.session_state.prediction_history.append(prediction_result)
+        with col_card1:
+            st.markdown(f"""
+            <div class="user-prediction-card">
+                <h3>🏆 Tournament Winner</h3>
+                <h2>{pred['winner']}</h2>
+            </div>
+            """, unsafe_allow_html=True)
             
-            # Display results
-            st.markdown("---")
-            st.subheader("🏆 Final Results")
+            st.markdown(f"""
+            <div class="user-prediction-card">
+                <h3>🥇 Finalists</h3>
+                <h4>{pred['finalist1']} vs {pred['finalist2']}</h4>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col_card2:
+            st.markdown(f"""
+            <div class="user-prediction-card">
+                <h3>⚽ Top Scorer</h3>
+                <h2>{pred['top_scorer']}</h2>
+                <p>{top_scorers_db[pred['top_scorer']]['team']}</p>
+            </div>
+            """, unsafe_allow_html=True)
             
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.success(f"🥇 **Champion**\n\n# {prediction_result['champion']}")
-            with col2:
-                st.info(f"🥈 **Runner-up**\n\n# {prediction_result['runner_up']}")
-            with col3:
-                st.warning(f"🥉 **Third Place**\n\n# {prediction_result['third']}")
-            
-            st.markdown("### Semifinalists")
-            semi_col1, semi_col2 = st.columns(2)
-            with semi_col1:
-                for i, team in enumerate(prediction_result['semi_finalists'][:len(prediction_result['semi_finalists'])//2]):
-                    st.write(f"{i+1}. {team}")
-            with semi_col2:
-                for i, team in enumerate(prediction_result['semi_finalists'][len(prediction_result['semi_finalists'])//2:]):
-                    st.write(f"{len(prediction_result['semi_finalists'])//2 + i + 1}. {team}")
+            st.markdown(f"""
+            <div class="user-prediction-card">
+                <h3>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England: {pred['england_placement']}</h3>
+                <h3>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland: {pred['scotland_placement']}</h3>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown(f"**Last Updated:** {pred['timestamp']}")
 
 # PAGE: STATISTICS
 elif page == "📊 Statistics":
@@ -384,7 +380,7 @@ elif page == "📊 Statistics":
     
     st.markdown("---")
     
-    st.subheader("Team Strength Ratings")
+    st.subheader("Team Strength Ratings (Top 20)")
     top_teams_df = pd.DataFrame({
         "Team": list(team_ratings.keys())[:20],
         "Rating": list(team_ratings.values())[:20]
@@ -406,7 +402,7 @@ elif page == "🏆 Tournament Bracket":
         st.success("✅ Bracket generated!")
     
     if st.session_state.bracket_data:
-        st.markdown("### Group Stage")
+        st.markdown("### Group Stage (16 Groups of 3 Teams)")
         
         # Create groups (for 48 teams: 16 groups of 3)
         groups_of_3 = [st.session_state.bracket_data[i:i+3] for i in range(0, len(st.session_state.bracket_data), 3)]
@@ -501,99 +497,51 @@ elif page == "🎲 Head to Head":
     elif team1 == team2:
         st.warning("Please select two different teams!")
 
-# PAGE: TOP SCORER
-elif page == "⚽ Top Scorer":
-    st.subheader("⚽ Golden Ball - Top Scorer Predictions")
-    
-    st.markdown("### Top Scorer Candidates")
-    
-    # Display top scorers
-    scorers_df = pd.DataFrame({
-        "Player": list(top_scorers_db.keys()),
-        "Team": [v["team"] for v in top_scorers_db.values()],
-        "Rating": [v["rating"] for v in top_scorers_db.values()],
-        "Avg Goals": [v["goals_avg"] for v in top_scorers_db.values()]
-    }).sort_values("Rating", ascending=False)
-    
-    st.dataframe(scorers_df, use_container_width=True)
-    
-    st.markdown("---")
-    
-    col1, col2 = st.columns([1, 1])
-    
-    with col1:
-        st.subheader("🎲 Random Prediction")
-        if st.button("🎲 Pick Random Top Scorer", type="primary"):
-            random_scorer = random.choice(list(top_scorers_db.keys()))
-            st.session_state.top_scorer_pick = random_scorer
-            st.success(f"🥇 **Top Scorer: {random_scorer}** ({top_scorers_db[random_scorer]['team']})")
-            st.metric("Predicted Goals", top_scorers_db[random_scorer]['goals_avg'])
-    
-    with col2:
-        st.subheader("🧠 Statistical Prediction")
-        if st.button("📊 Best Statistical Pick", type="primary"):
-            best_scorer = max(top_scorers_db.items(), key=lambda x: x[1]["rating"])
-            st.session_state.top_scorer_pick = best_scorer[0]
-            st.success(f"🥇 **Top Scorer: {best_scorer[0]}** ({best_scorer[1]['team']})")
-            st.metric("Predicted Goals", best_scorer[1]['goals_avg'])
-            st.metric("Rating", best_scorer[1]['rating'], delta="out of 100")
-    
-    st.markdown("---")
-    
-    st.subheader("👤 Select Your Prediction")
-    selected_scorer = st.selectbox("Choose a player as your top scorer pick:", list(top_scorers_db.keys()))
-    
-    if st.button("✅ Confirm My Pick", type="primary"):
-        st.session_state.top_scorer_pick = selected_scorer
-        scorer_info = top_scorers_db[selected_scorer]
-        st.success(f"✅ You've picked **{selected_scorer}** from **{scorer_info['team']}** as top scorer!")
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("Player Rating", scorer_info['rating'])
-        with col2:
-            st.metric("Expected Goals", scorer_info['goals_avg'])
-    
-    if st.session_state.top_scorer_pick:
-        st.markdown("---")
-        st.info(f"✅ **Your Current Pick:** {st.session_state.top_scorer_pick}")
-
 # PAGE: HISTORY
 elif page == "💾 History":
-    st.subheader("💾 Prediction History")
+    st.subheader("💾 Your Saved Predictions")
     
-    if st.session_state.prediction_history or st.session_state.top_scorer_pick:
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("Tournament Predictions", len(st.session_state.prediction_history))
-        with col2:
-            st.metric("Top Scorer Pick", st.session_state.top_scorer_pick or "None")
+    if st.session_state.user_manual_prediction:
+        pred = st.session_state.user_manual_prediction
+        
+        st.success("✅ You have saved predictions!")
         
         st.markdown("---")
         
-        if st.session_state.prediction_history:
-            st.subheader("Tournament Predictions")
-            for idx, pred in enumerate(reversed(st.session_state.prediction_history), 1):
-                with st.expander(f"Prediction #{len(st.session_state.prediction_history) - idx + 1} - {pred['timestamp']} ({pred['method']})"):
-                    st.write(f"**Method:** {pred['method']}")
-                    st.write(f"**Champion:** 🥇 {pred['champion']}")
-                    st.write(f"**Runner-up:** 🥈 {pred['runner_up']}")
-                    st.write(f"**Third Place:** 🥉 {pred['third']}")
-                    st.write(f"**Semifinalists:** {', '.join(pred['semi_finalists'])}")
+        # Display as detailed card
+        st.markdown("### 📋 Your Tournament Predictions")
         
-        if st.button("🗑️ Clear All History"):
-            st.session_state.prediction_history = []
-            st.session_state.top_scorer_pick = None
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("#### Tournament Results")
+            st.write(f"**🥇 Champion:** {pred['winner']}")
+            st.write(f"**🥈 Finalist 1:** {pred['finalist1']}")
+            st.write(f"**🥈 Finalist 2:** {pred['finalist2']}")
+        
+        with col2:
+            st.markdown("#### Additional Predictions")
+            st.write(f"**⚽ Top Scorer:** {pred['top_scorer']} ({top_scorers_db[pred['top_scorer']]['team']})")
+            st.write(f"**🏴󠁧󠁢󠁥󠁮󠁧󠁿 England:** {pred['england_placement']}")
+            st.write(f"**🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland:** {pred['scotland_placement']}")
+        
+        st.markdown(f"**Saved at:** {pred['timestamp']}")
+        
+        st.markdown("---")
+        
+        if st.button("🗑️ Clear My Predictions"):
+            st.session_state.user_manual_prediction = None
+            st.success("✅ Predictions cleared!")
             st.rerun()
     else:
-        st.info("No predictions yet. Go to the Predictions or Top Scorer pages to generate some!")
+        st.info("📝 No saved predictions yet. Go to the 'My Predictions' page to create your first prediction!")
 
 st.markdown("---")
 
 # Footer
 st.markdown("""
 <div style='text-align: center; color: gray; padding: 20px;'>
-<p>🏆 The Richards World Cup 2026 Predictor | Advanced Analytics Edition</p>
+<p>🏆 The Richards World Cup 2026 Predictor | Make Your Predictions Today!</p>
 <p><small>Predictions are for entertainment purposes only</small></p>
 </div>
 """, unsafe_allow_html=True)
